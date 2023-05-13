@@ -1,12 +1,42 @@
+<!-- index.html -->
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        
-        <title>Hello World Simple App</title>
-    </head>
-    <body>
-        <div>Hello World!</div>
-    </body>
+<html>
+<head>
+  <title>Image to Video Conversion</title>
+</head>
+<body>
+  <h1>Image to Video Conversion</h1>
+  <form id="uploadForm">
+    <input type="file" name="image" accept="image/*" required>
+    <button type="submit">Convert and Upload</button>
+  </form>
+  <div id="status"></div>
+
+  <script>
+    const form = document.getElementById('uploadForm');
+    const statusDiv = document.getElementById('status');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(form);
+
+      try {
+        const response = await fetch('/upload', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (response.ok) {
+          statusDiv.textContent = 'Video uploaded to S3 successfully';
+        } else {
+          statusDiv.textContent = 'Error converting image to video or uploading to S3';
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        statusDiv.textContent = 'An error occurred during the conversion and upload process';
+      }
+    });
+  </script>
+</body>
 </html>
